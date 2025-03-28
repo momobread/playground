@@ -1,10 +1,11 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import tseslint from "@typescript-eslint/eslint-plugin";
-import tsparser from "@typescript-eslint/parser";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
+import tseslint from '@typescript-eslint/eslint-plugin';
+import tsparser from '@typescript-eslint/parser';
+import prettier from 'eslint-plugin-prettier';
 // @ts-expect-error 'ignore'
-import importPlugin from "eslint-plugin-import"; 
+import importPlugin from 'eslint-plugin-import';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,58 +15,56 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
+  // ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        project: "./tsconfig.json",
-        
+        project: './tsconfig.json',
       },
     },
     plugins: {
-      "@typescript-eslint": tseslint,
+      '@typescript-eslint': tseslint,
       import: importPlugin,
+      prettier,
     },
-   
+
     rules: {
-      "import/no-unresolved": "off",
-      "react/react-in-jsx-scope": "off",
-      "@typescript-eslint/no-restricted-imports": [
-        "error",
+      'import/no-unresolved': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'prettier/prettier': ['error', {}],
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
         {
-          patterns: ["../*", "./*"],
+          patterns: ['../*', './*'],
         },
       ],
-      "import/order": [
-        "error",
+
+      'import/order': [
+        'error',
         {
-          groups: [
-            ["builtin", "external"],
-            "internal",
-            ["parent", "sibling"],
-            "index",
-            "object",
-          ],
+          groups: [['builtin', 'external'], 'internal', ['parent', 'sibling'], 'index', 'object'],
           pathGroups: [
             {
-              pattern: "~/**",
-              group: "external",
-              position: "before",
+              pattern: '~/**',
+              group: 'external',
+              position: 'before',
             },
-            { pattern: "@*", group: "external", position: "after" },
-            { pattern: "@*/**", group: "external", position: "after" },
+            { pattern: '@*', group: 'external', position: 'after' },
+            { pattern: '@*/**', group: 'external', position: 'after' },
           ],
-          "newlines-between": "always",
-          pathGroupsExcludedImportTypes: ["react"],
+          'newlines-between': 'always',
+          pathGroupsExcludedImportTypes: ['react'],
           alphabetize: {
-            order: "asc",
+            order: 'asc',
             caseInsensitive: true,
           },
         },
       ],
     },
-    ignores:["eslint.config.mjs"]
+
+    ignores: ['eslint.config.mjs'],
   },
 ];
 
