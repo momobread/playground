@@ -1,10 +1,22 @@
 import { signIn } from 'next-auth/react';
 import CustomInput from './CustomInput';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const LoginForm = ({ render, handleSubmit }) => {
+  const [isError, setIsError] = useState<string>('');
+
+  const router = useRouter();
   const onSubmitForm = async (data) => {
-    console.log(data);
-    await signIn('credentials', { id: data.id, password: data.password });
+    const result = await signIn('credentials', {
+      id: data?.id,
+      password: data?.password,
+      redirect: false,
+    });
+    if (result?.ok) router.push('/home');
+    if (!result?.ok) {
+      setIsError(result?.error);
+    }
   };
 
   return (
@@ -13,6 +25,7 @@ const LoginForm = ({ render, handleSubmit }) => {
       onSubmit={handleSubmit(onSubmitForm)}
     >
       {render}
+      {isError && <span>아이디와 비밀번호가 일치하지 않습니다</span>}
     </form>
   );
 };

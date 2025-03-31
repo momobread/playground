@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Login from '@/app/_components/Login';
 import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex h-full flex-col items-center justify-center">
       <Image src="/bg1.jpg" fill alt="main-page" className="-z-10" />
